@@ -7,6 +7,7 @@ from metric import BatchEvaluation
 
 with open("../config/logging.json", "r") as f:
     config = json.load(f)
+    config["handlers"]["file"]["filename"] = "../logs/generation.log"
     logging.config.dictConfig(config)
 logger = logging.getLogger()
 

@@ -34,6 +34,7 @@ def get_llm_summary(args, decoder):
         logger.info(f"INPUT: {x}")
         pred_std = decoder.decode(input=x).content
         logger.info(f"OUTPUT: {pred_std} \n")
+        # === 키워드 추출 프롬프트 및 키워드 기반 요약 프롬프트 추가 예정
         data_output["output"].append(
             {
                 "index": i,
