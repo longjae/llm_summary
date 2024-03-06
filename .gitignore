@@ -1,5 +1,4 @@
 .env
-/config
 /logs
 __pycache__
 venv

@@ -1,0 +1,24 @@
+{
+    "version": 1,
+    "formatters": {
+        "simple": {"format": "[%(name)s] %(message)s"},
+        "complex": {
+            "format": "[%(levelname)s] [%(asctime)s] [%(filename)s:%(lineno)d :: %(funcName)s()] -> %(message)s"
+        }
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "simple",
+            "level": "DEBUG"
+        },
+        "file": {
+            "class": "logging.FileHandler",
+            "filename": "./logs/generation.log",
+            "formatter": "complex",
+            "level": "DEBUG"
+        }
+    },
+    "root": {"handlers": ["console", "file"], "level": "DEBUG"},
+    "loggers": {"parent": {"level": "INFO"}, "parent.child": {"level": "DEBUG"}}
+}
