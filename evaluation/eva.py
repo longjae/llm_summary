@@ -23,19 +23,18 @@ def batch_evaluation(start_id, end_id):
     for i in range(start_id, end_id + 1):
         label = data[i]["abstract"]
         std_pred = data[i]["std_summary"]
-        # cot_pred = data[i]["cot_summary"]
+        cot_pred = data[i]["cot_summary"]
 
-        # if label == "" or std_pred == "" or cot_pred == "":
-        if label == "" or std_pred == "":
+        if label == "" or std_pred == "" or cot_pred == "":
             continue
 
         eva_ori_std.set_text(label, std_pred)
         eva_ori_std.get_rouge_score()
         eva_ori_std.get_bs_score()
 
-        # eva_ori_cot.set_text(label, cot_pred)
-        # eva_ori_cot.get_rouge_score()
-        # eva_ori_cot.get_bs_score()
+        eva_ori_cot.set_text(label, cot_pred)
+        eva_ori_cot.get_rouge_score()
+        eva_ori_cot.get_bs_score()
 
     logger.info(f"LABEL VS. GPT-3 STD. SUMMARY:")
     logger.info(f"BATCH SIZE: {eva_ori_std.call_time_rs}")
@@ -44,12 +43,12 @@ def batch_evaluation(start_id, end_id):
     logger.info(f"RL: {eva_ori_std.total_rl / eva_ori_std.call_time_rs}")
     logger.info(f"BERT_SCORE: {eva_ori_std.total_bs / eva_ori_std.call_time_bs}")
 
-    # logger.info(f"LABEL VS. GPT-3 CoT. SUMMARY:")
-    # logger.info(f"BATCH SIZE: {eva_ori_cot.call_time_rs}")
-    # logger.info(f"R1: {eva_ori_cot.total_r1 / eva_ori_cot.call_time_rs}")
-    # logger.info(f"R2: {eva_ori_cot.total_r2 / eva_ori_cot.call_time_rs}")
-    # logger.info(f"RL: {eva_ori_cot.total_rl / eva_ori_cot.call_time_rs}")
-    # logger.info(f"BERT_SCORE: {eva_ori_cot.total_bs / eva_ori_cot.call_time_bs}")
+    logger.info(f"LABEL VS. GPT-3 CoT. SUMMARY:")
+    logger.info(f"BATCH SIZE: {eva_ori_cot.call_time_rs}")
+    logger.info(f"R1: {eva_ori_cot.total_r1 / eva_ori_cot.call_time_rs}")
+    logger.info(f"R2: {eva_ori_cot.total_r2 / eva_ori_cot.call_time_rs}")
+    logger.info(f"RL: {eva_ori_cot.total_rl / eva_ori_cot.call_time_rs}")
+    logger.info(f"BERT_SCORE: {eva_ori_cot.total_bs / eva_ori_cot.call_time_bs}")
 
 
 if __name__ == "__main__":
