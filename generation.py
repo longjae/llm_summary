@@ -23,36 +23,26 @@ def get_llm_summary(args, decoder):
         data = json.load(f)
 
     data_output = {"output": []}
-    sys_txt = "I want you to act as a expert for summarization for Korean language"
-    sum_txt = "Summarize the above article in a sentence in Korean."
-    kw_txt = """
-    What are the important entities in this document?
-    What are the important dates in this document?
-    What events are happening in this events?
-    What is the result of these events?
-    Please answer to JSON the above questions in Korean.
-    """
-    # You must answer like an example below.
-    # example:
-    # {
-    #     'entities': 'Mr. Baker, the car driver, and the motorcyclist who was injured',
-    #     'dates': '4 June and the present day',
-    #     'events': 'a collision between Mr. Baker’s motorcycle and a car, and the investigation into the collision',
-    #     'result': 'Mr. Baker died and the car driver and motorcyclist were injured.'
-    # }
-    # An example in english but you must answer in Korean.
-    cot_txt = """
-    Let's integrate the above information and summarize the article in Korean.
-    """
+    with open("./msg/sys.txt", "r") as f:
+        sys_txt = f.read()
+    with open("./msg/sum.txt", "r") as f:
+        sum_txt = f.read()
+    if args.cot_true:
+        with open("./msg/kw.txt", "r") as f:
+            kw_txt = f.read()
+        with open("./msg/cot.txt", "r") as f:
+            cot_txt = f.read()
     for i in range(args.start_id, args.end_id + 1):
         logger.info(f"IDX #: {i}")
         src = data["data"][i]["text"]
+        # --- std_summary ---
         x = sys_txt + "\n" + f"Article: {src} \n" + sum_txt
         logger.info(f"INPUT: {x}")
         pred_std = decoder.decode(input=x).content
         logger.info(f"OUTPUT: {pred_std} \n")
-        # 테스트 필요
+        # ---
         if args.cot_true:
+            # --- cot_summary
             x = sys_txt + "\n" + f"Article: {src} \n" + kw_txt
             logger.info(f"INPUT: {x}")
             cot_keywords = decoder.decode(input=x).content
@@ -63,6 +53,7 @@ def get_llm_summary(args, decoder):
             logger.info(f"COT INPUT: {cot_input}")
             pred_cot = decoder.decode(input=cot_input).content
             logger.info(f"COT OUTPUT: {pred_cot} \n")
+            # ---
             data_output["output"].append(
                 {
                     "index": i,
@@ -82,8 +73,8 @@ def get_llm_summary(args, decoder):
                     "std_summary": pred_std,
                 }
             )
-        with open("./output/train_output.json", "w") as g:
-            g.write(json.dumps(data_output, indent=4, ensure_ascii=False))
+        with open("./output/train_output.json", "w") as f:
+            f.write(json.dumps(data_output, indent=4, ensure_ascii=False))
 
 
 if __name__ == "__main__":
