@@ -1,0 +1,6 @@
+What are the important result of a crime in this document?
+Who are the important litigant parties in this document?
+What are the important dates in this document?
+What are the important places in this document?
+What are the important acts in this document?
+Please answer to JSON the above questions in Korean.

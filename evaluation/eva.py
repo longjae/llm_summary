@@ -12,8 +12,8 @@ with open("../config/logging.json", "r") as f:
 logger = logging.getLogger()
 
 
-def batch_evaluation(start_id, end_id):
-    file_path = "../output/train_output.json"
+def batch_evaluation(cot, start_id, end_id):
+    file_path = f"../output/{cot}_output.json"
     with open(file_path, "r", encoding="utf-8") as f:
         data = json.load(f)["output"]
 
@@ -31,10 +31,10 @@ def batch_evaluation(start_id, end_id):
         eva_ori_std.set_text(label, std_pred)
         eva_ori_std.get_rouge_score()
         eva_ori_std.get_bs_score()
-
-        eva_ori_cot.set_text(label, cot_pred)
-        eva_ori_cot.get_rouge_score()
-        eva_ori_cot.get_bs_score()
+        if not cot == None:
+            eva_ori_cot.set_text(label, cot_pred)
+            eva_ori_cot.get_rouge_score()
+            eva_ori_cot.get_bs_score()
 
     logger.info(f"LABEL VS. GPT-3 STD. SUMMARY:")
     logger.info(f"BATCH SIZE: {eva_ori_std.call_time_rs}")
@@ -43,17 +43,19 @@ def batch_evaluation(start_id, end_id):
     logger.info(f"RL: {eva_ori_std.total_rl / eva_ori_std.call_time_rs}")
     logger.info(f"BERT_SCORE: {eva_ori_std.total_bs / eva_ori_std.call_time_bs}")
 
-    logger.info(f"LABEL VS. GPT-3 CoT. SUMMARY:")
-    logger.info(f"BATCH SIZE: {eva_ori_cot.call_time_rs}")
-    logger.info(f"R1: {eva_ori_cot.total_r1 / eva_ori_cot.call_time_rs}")
-    logger.info(f"R2: {eva_ori_cot.total_r2 / eva_ori_cot.call_time_rs}")
-    logger.info(f"RL: {eva_ori_cot.total_rl / eva_ori_cot.call_time_rs}")
-    logger.info(f"BERT_SCORE: {eva_ori_cot.total_bs / eva_ori_cot.call_time_bs}")
+    if not cot == None:
+        logger.info(f"LABEL VS. GPT-3 CoT. SUMMARY:")
+        logger.info(f"BATCH SIZE: {eva_ori_cot.call_time_rs}")
+        logger.info(f"R1: {eva_ori_cot.total_r1 / eva_ori_cot.call_time_rs}")
+        logger.info(f"R2: {eva_ori_cot.total_r2 / eva_ori_cot.call_time_rs}")
+        logger.info(f"RL: {eva_ori_cot.total_rl / eva_ori_cot.call_time_rs}")
+        logger.info(f"BERT_SCORE: {eva_ori_cot.total_bs / eva_ori_cot.call_time_bs}")
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Evaluation")
+    parser.add_argument("--cot", default=None, choices=[None, "cot", "law"])
     parser.add_argument("--start_id", type=int, default="0")
     parser.add_argument("--end_id", type=int, default=999)
     args = parser.parse_args()
-    batch_evaluation(start_id=args.start_id, end_id=args.end_id)
+    batch_evaluation(cot=args.cot, start_id=args.start_id, end_id=args.end_id)

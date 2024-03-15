@@ -22,16 +22,22 @@ def get_llm_summary(args, decoder):
     with open(in_file, "r", encoding="utf-8") as f:
         data = json.load(f)
 
-    data_output = {"output": []}
     with open("./msg/sys.txt", "r") as f:
         sys_txt = f.read()
     with open("./msg/sum.txt", "r") as f:
         sum_txt = f.read()
-    if args.cot_true:
-        with open("./msg/kw.txt", "r") as f:
+    if args.cot == "cot":
+        with open("./msg/cot/kw.txt", "r") as f:
             kw_txt = f.read()
-        with open("./msg/cot.txt", "r") as f:
+        with open("./msg/cot/cot.txt", "r") as f:
             cot_txt = f.read()
+    elif args.cot == "law":
+        with open("./msg/law/kw.txt", "r") as f:
+            kw_txt = f.read()
+        with open("./msg/law/cot.txt", "r") as f:
+            cot_txt = f.read()
+
+    data_output = {"output": []}
     for i in range(args.start_id, args.end_id + 1):
         logger.info(f"IDX #: {i}")
         src = data["data"][i]["text"]
@@ -41,7 +47,7 @@ def get_llm_summary(args, decoder):
         pred_std = decoder.decode(input=x).content
         logger.info(f"OUTPUT: {pred_std} \n")
         # ---
-        if args.cot_true:
+        if not args.cot == None:
             # --- cot_summary
             x = sys_txt + "\n" + f"Article: {src} \n" + kw_txt
             logger.info(f"INPUT: {x}")
@@ -73,7 +79,7 @@ def get_llm_summary(args, decoder):
                     "std_summary": pred_std,
                 }
             )
-        with open("./output/train_output.json", "w") as f:
+        with open(f"./output/{args.cot}_output.json", "w") as f:
             f.write(json.dumps(data_output, indent=4, ensure_ascii=False))
 
 
