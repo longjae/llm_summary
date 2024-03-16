@@ -26,28 +26,28 @@ def get_llm_summary(args, decoder):
         sys_txt = f.read()
     with open("./msg/sum.txt", "r") as f:
         sum_txt = f.read()
-    if args.cot == "cot":
-        with open("./msg/cot/kw.txt", "r") as f:
+    if not args.cot == None:
+        with open(f"./msg/{args.cot}/kw.txt", "r") as f:
             kw_txt = f.read()
-        with open("./msg/cot/cot.txt", "r") as f:
+        with open(f"./msg/{args.cot}/cot.txt", "r") as f:
             cot_txt = f.read()
-    elif args.cot == "law":
-        with open("./msg/law/kw.txt", "r") as f:
-            kw_txt = f.read()
-        with open("./msg/law/cot.txt", "r") as f:
-            cot_txt = f.read()
+        with open("./output/std_output.json", "r") as f:
+            std_output = json.load(f)["output"]
 
     data_output = {"output": []}
     for i in range(args.start_id, args.end_id + 1):
         logger.info(f"IDX #: {i}")
         src = data["data"][i]["text"]
         # --- std_summary ---
-        x = sys_txt + "\n" + f"Article: {src} \n" + sum_txt
-        logger.info(f"INPUT: {x}")
-        pred_std = decoder.decode(input=x).content
-        logger.info(f"OUTPUT: {pred_std} \n")
+        if args.cot == None:
+            x = sys_txt + "\n" + f"Article: {src} \n" + sum_txt
+            logger.info(f"INPUT: {x}")
+            std_sum = decoder.decode(input=x).content
+            logger.info(f"OUTPUT: {std_sum} \n")
         # ---
         if not args.cot == None:
+            std_sum = std_output[i]["std_summary"]
+            logger.info(f"STD_SUMMARY: {std_sum}")
             # --- cot_summary
             x = sys_txt + "\n" + f"Article: {src} \n" + kw_txt
             logger.info(f"INPUT: {x}")
@@ -65,7 +65,7 @@ def get_llm_summary(args, decoder):
                     "index": i,
                     "text": src,
                     "abstract": data["data"][i]["abstract"],
-                    "std_summary": pred_std,
+                    "std_summary": std_sum,
                     "cot_keywords": cot_keywords,
                     "cot_summary": pred_cot,
                 }
@@ -76,11 +76,13 @@ def get_llm_summary(args, decoder):
                     "index": i,
                     "text": src,
                     "abstract": data["data"][i]["abstract"],
-                    "std_summary": pred_std,
+                    "std_summary": std_sum,
                 }
             )
-        with open(f"./output/{args.cot}_output.json", "w") as f:
-            f.write(json.dumps(data_output, indent=4, ensure_ascii=False))
+    if args.cot == None:
+        args.cot = "std"
+    with open(f"./output/{args.cot}_output.json", "w") as f:
+        f.write(json.dumps(data_output, indent=4, ensure_ascii=False))
 
 
 if __name__ == "__main__":

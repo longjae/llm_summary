@@ -44,7 +44,10 @@ def batch_evaluation(cot, start_id, end_id):
     logger.info(f"BERT_SCORE: {eva_ori_std.total_bs / eva_ori_std.call_time_bs}")
 
     if not cot == None:
-        logger.info(f"LABEL VS. GPT-3 CoT. SUMMARY:")
+        if cot == "cot":
+            logger.info(f"LABEL VS. GPT-3 CoT. SUMMARY:")
+        elif cot == "law":
+            logger.info(f"LABEL VS. GPT-3 LawCoT. SUMMARY:")
         logger.info(f"BATCH SIZE: {eva_ori_cot.call_time_rs}")
         logger.info(f"R1: {eva_ori_cot.total_r1 / eva_ori_cot.call_time_rs}")
         logger.info(f"R2: {eva_ori_cot.total_r2 / eva_ori_cot.call_time_rs}")
