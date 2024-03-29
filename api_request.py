@@ -29,17 +29,16 @@ class Decoder:
         tokenizer = AutoTokenizer.from_pretrained(model_dir)
         model = AutoModelForSeq2SeqLM.from_pretrained(model_dir)
 
-        max_input_length = 512 + 256
+        max_input_length = 256
         inputs = ["summarize: " + input]
         input_ids = tokenizer(
             inputs, max_length=max_input_length, truncation=True, return_tensors="pt"
         )
         output = model.generate(
             **input_ids,
-            do_sample=True,
-            max_length=256,
-            min_length=100,
-            num_beams=8,
+            max_length=100,
+            min_length=10,
+            num_beams=2,
         )
 
         decoded_output = tokenizer.batch_decode(output, skip_special_tokens=True)[0]
