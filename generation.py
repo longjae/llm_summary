@@ -27,17 +27,18 @@ def get_llm_summary(args, decoder):
     with open("./msg/sum.txt", "r") as f:
         sum_txt = f.read()
     if not args.cot == None:
-        with open(f"./msg/{args.cot}/kw.txt", "r") as f:
-            kw_txt = f.read()
-        with open(f"./msg/{args.cot}/cot.txt", "r") as f:
-            cot_txt = f.read()
+        if args.cot != "t5":
+            with open(f"./msg/{args.cot}/kw.txt", "r") as f:
+                kw_txt = f.read()
+            with open(f"./msg/{args.cot}/cot.txt", "r") as f:
+                cot_txt = f.read()
         with open("./output/std_output.json", "r") as f:
             std_output = json.load(f)["output"]
 
     data_output = {"output": []}
     for i in range(args.start_id, args.end_id + 1):
         logger.info(f"IDX #: {i}")
-        src = data["data"][i]["text"]
+        src = data["data"][i]["text"].replace("\n", " ")
         # --- std_summary ---
         if args.cot == None:
             x = sys_txt + "\n" + f"Article: {src} \n" + sum_txt
@@ -46,30 +47,45 @@ def get_llm_summary(args, decoder):
             logger.info(f"OUTPUT: {std_sum} \n")
         # ---
         if not args.cot == None:
-            std_sum = std_output[i]["std_summary"]
-            logger.info(f"STD_SUMMARY: {std_sum}")
-            # --- cot_summary
-            x = sys_txt + "\n" + f"Article: {src} \n" + kw_txt
-            logger.info(f"INPUT: {x}")
-            cot_keywords = decoder.decode(input=x).content
-            logger.info(f"KEYWORDS: {cot_keywords}")
-            cot_input = (
-                f"Article: {src} \n" + f"Information: {cot_keywords}: \n" + cot_txt
-            )
-            logger.info(f"COT INPUT: {cot_input}")
-            pred_cot = decoder.decode(input=cot_input).content
-            logger.info(f"COT OUTPUT: {pred_cot} \n")
-            # ---
-            data_output["output"].append(
-                {
-                    "index": i,
-                    "text": src,
-                    "abstract": data["data"][i]["abstract"],
-                    "std_summary": std_sum,
-                    "cot_keywords": cot_keywords,
-                    "cot_summary": pred_cot,
-                }
-            )
+            if args.cot != "t5":
+                std_sum = std_output[i]["std_summary"]
+                logger.info(f"STD_SUMMARY: {std_sum}")
+                # --- cot_summary
+                x = sys_txt + "\n" + f"Article: {src} \n" + kw_txt
+                logger.info(f"INPUT: {x}")
+                cot_keywords = decoder.decode(input=x).content
+                logger.info(f"KEYWORDS: {cot_keywords}")
+                cot_input = (
+                    f"Article: {src} \n" + f"Information: {cot_keywords}: \n" + cot_txt
+                )
+                logger.info(f"COT INPUT: {cot_input}")
+                pred_cot = decoder.decode(input=cot_input).content
+                logger.info(f"COT OUTPUT: {pred_cot} \n")
+                # ---
+                data_output["output"].append(
+                    {
+                        "index": i,
+                        "text": src,
+                        "abstract": data["data"][i]["abstract"],
+                        "std_summary": std_sum,
+                        "cot_keywords": cot_keywords,
+                        "cot_summary": pred_cot,
+                    }
+                )
+            elif args.cot == "t5":
+                std_sum = std_output[i]["std_summary"]
+                logger.info(f"STD_SUMMARY: {std_sum}")
+                pred_plm = decoder.decoder_for_t5(input=src)
+                logger.info(f"{args.cot.upper()}_SUMMARY: {pred_plm}")
+                data_output["output"].append(
+                    {
+                        "index": i,
+                        "text": src,
+                        "abstract": data["data"][i]["abstract"],
+                        "std_summary": std_sum,
+                        "plm_summary": pred_plm,
+                    }
+                )
         else:
             data_output["output"].append(
                 {

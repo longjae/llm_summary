@@ -23,7 +23,10 @@ def batch_evaluation(cot, start_id, end_id):
     for i in range(start_id, end_id + 1):
         label = data[i]["abstract"]
         std_pred = data[i]["std_summary"]
-        cot_pred = data[i]["cot_summary"]
+        if cot == "t5":
+            cot_pred = data[i]["plm_summary"]
+        else:
+            cot_pred = data[i]["cot_summary"]
 
         if label == "" or std_pred == "" or cot_pred == "":
             continue
@@ -48,6 +51,10 @@ def batch_evaluation(cot, start_id, end_id):
             logger.info(f"LABEL VS. GPT-3 CoT. SUMMARY:")
         elif cot == "law":
             logger.info(f"LABEL VS. GPT-3 LawCoT. SUMMARY:")
+        elif cot == "casebrief":
+            logger.info(f"LABEL VS. GPT-3 CasebriefCoT. SUMMARY:")
+        elif cot == "t5":
+            logger.info(f"LABEL VS. GPT-3 T5. SUMMARY:")
         logger.info(f"BATCH SIZE: {eva_ori_cot.call_time_rs}")
         logger.info(f"R1: {eva_ori_cot.total_r1 / eva_ori_cot.call_time_rs}")
         logger.info(f"R2: {eva_ori_cot.total_r2 / eva_ori_cot.call_time_rs}")
@@ -57,7 +64,7 @@ def batch_evaluation(cot, start_id, end_id):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Evaluation")
-    parser.add_argument("--cot", default=None, choices=[None, "cot", "law"])
+    parser.add_argument("--cot", default=None, choices=[None, "cot", "law", "t5"])
     parser.add_argument("--start_id", type=int, default="0")
     parser.add_argument("--end_id", type=int, default=999)
     args = parser.parse_args()
