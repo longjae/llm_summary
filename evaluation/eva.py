@@ -64,7 +64,9 @@ def batch_evaluation(cot, start_id, end_id):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Evaluation")
-    parser.add_argument("--cot", default=None, choices=[None, "cot", "law", "t5"])
+    parser.add_argument(
+        "--cot", default=None, choices=[None, "cot", "law", "casebrief", "t5"]
+    )
     parser.add_argument("--start_id", type=int, default="0")
     parser.add_argument("--end_id", type=int, default=999)
     args = parser.parse_args()

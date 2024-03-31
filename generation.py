@@ -18,7 +18,8 @@ OPENAI_API_KEY = os.getenv("OPENAI_APT_KEY")
 
 def get_llm_summary(args, decoder):
     logger.info("LOAD JSON DATA \n")
-    in_file = os.path.join("./data/train.json")
+    # in_file = os.path.join("./data/train.json")
+    in_file = os.path.join("./data/valid.json")
     with open(in_file, "r", encoding="utf-8") as f:
         data = json.load(f)
 
@@ -48,15 +49,16 @@ def get_llm_summary(args, decoder):
         # ---
         if not args.cot == None:
             if args.cot != "t5":
+                abstract = data["data"][i]["abstract"]
                 std_sum = std_output[i]["std_summary"]
-                logger.info(f"STD_SUMMARY: {std_sum}")
+                logger.info(f"ABSTRACT: {abstract}")
                 # --- cot_summary
                 x = sys_txt + "\n" + f"Article: {src} \n" + kw_txt
                 logger.info(f"INPUT: {x}")
                 cot_keywords = decoder.decode(input=x).content
                 logger.info(f"KEYWORDS: {cot_keywords}")
                 cot_input = (
-                    f"Article: {src} \n" + f"Information: {cot_keywords}: \n" + cot_txt
+                    f"Document: {src} \n" + f"Information: {cot_keywords}: \n" + cot_txt
                 )
                 logger.info(f"COT INPUT: {cot_input}")
                 pred_cot = decoder.decode(input=cot_input).content
@@ -66,22 +68,23 @@ def get_llm_summary(args, decoder):
                     {
                         "index": i,
                         "text": src,
-                        "abstract": data["data"][i]["abstract"],
+                        "abstract": abstract,
                         "std_summary": std_sum,
                         "cot_keywords": cot_keywords,
                         "cot_summary": pred_cot,
                     }
                 )
             elif args.cot == "t5":
+                abstract = data["data"][i]["abstract"]
                 std_sum = std_output[i]["std_summary"]
-                logger.info(f"STD_SUMMARY: {std_sum}")
+                logger.info(f"ABSTRACT: {abstract}")
                 pred_plm = decoder.decoder_for_t5(input=src)
                 logger.info(f"{args.cot.upper()}_SUMMARY: {pred_plm}")
                 data_output["output"].append(
                     {
                         "index": i,
                         "text": src,
-                        "abstract": data["data"][i]["abstract"],
+                        "abstract": abstract,
                         "std_summary": std_sum,
                         "plm_summary": pred_plm,
                     }

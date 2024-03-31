@@ -1,5 +1,4 @@
 import nltk
-import torch
 from langchain.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
@@ -11,7 +10,7 @@ class Decoder:
         return response
 
     def decoder_for_gpt(self, input):
-        chat = ChatOpenAI(model="gpt-3.5-turbo")
+        chat = ChatOpenAI(model="gpt-3.5-turbo", temperature=0)
         xlt_msg = "I want you to act as a expert for summarization for Korean language. Here is an article below."
         template = ChatPromptTemplate.from_messages(
             [
@@ -29,7 +28,7 @@ class Decoder:
         tokenizer = AutoTokenizer.from_pretrained(model_dir)
         model = AutoModelForSeq2SeqLM.from_pretrained(model_dir)
 
-        max_input_length = 256
+        max_input_length = 128
         inputs = ["summarize: " + input]
         input_ids = tokenizer(
             inputs, max_length=max_input_length, truncation=True, return_tensors="pt"
@@ -38,7 +37,7 @@ class Decoder:
             **input_ids,
             max_length=100,
             min_length=10,
-            num_beams=2,
+            num_beams=1,
         )
 
         decoded_output = tokenizer.batch_decode(output, skip_special_tokens=True)[0]

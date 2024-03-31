@@ -4,4 +4,4 @@ What are the legal issues in this document?
 What are the legal principles applied in the case?
 What are the holdings and reasonings of the majority?
 What is a summary of any concurrences and dissents?
-Please answer to JSON the above questions in Korean. If there's nothing important, return it as an empty list.
+Please answer concisely to JSON format the above questions in Korean.
