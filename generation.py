@@ -42,7 +42,7 @@ def get_llm_summary(args, decoder):
         src = data["data"][i]["text"].replace("\n", " ")
         # --- std_summary ---
         if args.cot == None:
-            x = sys_txt + "\n" + f"Article: {src} \n" + sum_txt
+            x = sys_txt + "\n" + f"Document: {src} \n" + sum_txt
             logger.info(f"INPUT: {x}")
             std_sum = decoder.decode(input=x).content
             logger.info(f"OUTPUT: {std_sum} \n")
@@ -53,7 +53,7 @@ def get_llm_summary(args, decoder):
                 std_sum = std_output[i]["std_summary"]
                 logger.info(f"ABSTRACT: {abstract}")
                 # --- cot_summary
-                x = sys_txt + "\n" + f"Article: {src} \n" + kw_txt
+                x = sys_txt + "\n" + f"Document: {src} \n" + kw_txt
                 logger.info(f"INPUT: {x}")
                 cot_keywords = decoder.decode(input=x).content
                 logger.info(f"KEYWORDS: {cot_keywords}")

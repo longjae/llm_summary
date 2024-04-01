@@ -1,2 +1,3 @@
-Let's integrate the above information and summarize the legal judgement up to three sentences in Korean.
-When translating into Korean, please translate in a neutral or informal tone.
+Summarize the document with using above information up to three sentences in Korean.
+Be sure to use the information above.
+When translating into Korean, please use a neutral or informal tone.
