@@ -41,10 +41,11 @@ def batch_evaluation(cot, start_id, end_id):
 
     logger.info(f"LABEL VS. GPT-3 STD. SUMMARY:")
     logger.info(f"BATCH SIZE: {eva_ori_std.call_time_rs}")
-    logger.info(f"R1: {eva_ori_std.total_r1 / eva_ori_std.call_time_rs}")
-    logger.info(f"R2: {eva_ori_std.total_r2 / eva_ori_std.call_time_rs}")
-    logger.info(f"RL: {eva_ori_std.total_rl / eva_ori_std.call_time_rs}")
-    logger.info(f"BERT_SCORE: {eva_ori_std.total_bs / eva_ori_std.call_time_bs}")
+    logger.info(f"ROUGE-1: {eva_ori_std.total_r1 / eva_ori_std.call_time_rs}")
+    logger.info(f"ROUGE-2: {eva_ori_std.total_r2 / eva_ori_std.call_time_rs}")
+    logger.info(f"ROUGE-3: {eva_ori_std.total_r3 / eva_ori_std.call_time_rs}")
+    logger.info(f"ROUGE-L: {eva_ori_std.total_rl / eva_ori_std.call_time_rs}")
+    # logger.info(f"BERT_SCORE: {eva_ori_std.total_bs / eva_ori_std.call_time_bs}")
 
     if not cot == None:
         if cot == "cot":
@@ -56,10 +57,11 @@ def batch_evaluation(cot, start_id, end_id):
         elif cot == "t5":
             logger.info(f"LABEL VS. GPT-3 T5. SUMMARY:")
         logger.info(f"BATCH SIZE: {eva_ori_cot.call_time_rs}")
-        logger.info(f"R1: {eva_ori_cot.total_r1 / eva_ori_cot.call_time_rs}")
-        logger.info(f"R2: {eva_ori_cot.total_r2 / eva_ori_cot.call_time_rs}")
-        logger.info(f"RL: {eva_ori_cot.total_rl / eva_ori_cot.call_time_rs}")
-        logger.info(f"BERT_SCORE: {eva_ori_cot.total_bs / eva_ori_cot.call_time_bs}")
+        logger.info(f"ROUGE-1: {eva_ori_cot.total_r1 / eva_ori_cot.call_time_rs}")
+        logger.info(f"ROUGE-2: {eva_ori_cot.total_r2 / eva_ori_cot.call_time_rs}")
+        logger.info(f"ROUGE-3: {eva_ori_cot.total_r3 / eva_ori_std.call_time_rs}")
+        logger.info(f"ROUGE-L: {eva_ori_cot.total_rl / eva_ori_cot.call_time_rs}")
+        # logger.info(f"BERT_SCORE: {eva_ori_cot.total_bs / eva_ori_cot.call_time_bs}")
 
 
 if __name__ == "__main__":
