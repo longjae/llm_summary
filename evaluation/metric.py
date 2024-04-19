@@ -3,7 +3,7 @@ from rouge import Rouge
 
 
 def rouge_score(ref, pred):
-    rouge = Rouge()
+    rouge = Rouge(metrics=["rouge-1", "rouge-2", "rouge-3", "rouge-l"])
     rs = rouge.get_scores(pred, ref)
     rouge1 = rs[0]["rouge-1"]["f"] * 100
     rouge2 = rs[0]["rouge-2"]["f"] * 100

@@ -1,3 +1,3 @@
-Summarize the document with using above information up to three sentences in Korean.
+Summarize the document with using above information up to three sentences in Korean and please use a neutral or informal tone.
 Be sure to use the information above.
-When translating into Korean, please use a neutral or informal tone.
+When summarizing an article, don't use words that aren't in the article.
