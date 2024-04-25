@@ -1,3 +1,0 @@
-Summarize the document with using above information up to 3 sentences in Korean and please use a neutral or informal tone.
-Be sure to include the information above.
-Use only the words in the document when you summarize.

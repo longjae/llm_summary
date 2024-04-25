@@ -1,6 +1,0 @@
-What is the rule of the case in this document?
-What is the fact of the case in this document?
-What is the issue of the case in this document?
-What is the reason of the case in this document?
-Please answer concisely to JSON format the above questions in Korean keywords not sentences.
-Please ignore what's in parentheses.

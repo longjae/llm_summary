@@ -1,5 +1,0 @@
-What are the rules of law in this document?
-What are the facts of the case in this document?
-What are the legal issues in this document?
-What are the legal principles applied in the case?
-Please answer concisely to JSON format the above questions in Korean words not sentneces.
