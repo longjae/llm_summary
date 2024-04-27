@@ -10,7 +10,7 @@ class Decoder:
         return response
 
     def decoder_for_gpt(self, input):
-        chat = ChatOpenAI(model="gpt-3.5-turbo", temperature=0)
+        chat = ChatOpenAI(model="gpt-3.5-turbo", temperature=0.2)
         xlt_msg = "I want you to act as a expert for summarization for Korean language. Here is an article below."
         template = ChatPromptTemplate.from_messages(
             [
