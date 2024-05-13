@@ -6,7 +6,7 @@
 ### 법원 판결문 요약 사용 방법
 ```
 python3 generation.py \
-    --cot <cot> \ # [None, "cot", "law", "casebrief", "t5"]
+    --cot <cot> \ # [None, "cot", "casebrief", "t5"]
     --start_id <start_id> \ # int
     --end_id <end_id> # int 
 ```
@@ -15,7 +15,7 @@ python3 generation.py \
 ```
 cd evaluation
 python3 eva.py \
-    --cot <cot> \ # [None, "cot", "law", "caebrief", "t5"]
+    --cot <cot> \ # [None, "cot", "caebrief", "t5"]
     --start_id <start_id> \ # int
     --end_id <end_id> # int
 ```

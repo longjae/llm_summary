@@ -50,8 +50,6 @@ def batch_evaluation(cot, start_id, end_id):
     if not cot == None:
         if cot == "cot":
             logger.info(f"LABEL VS. GPT-3 CoT. SUMMARY:")
-        elif cot == "law":
-            logger.info(f"LABEL VS. GPT-3 LawCoT. SUMMARY:")
         elif cot == "casebrief":
             logger.info(f"LABEL VS. GPT-3 CasebriefCoT. SUMMARY:")
         elif cot == "t5":
