@@ -1,7 +1,9 @@
 import nltk
 from langchain.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
-from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
+
+# from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
+from transformers import T5ForConditionalGeneration, T5TokenizerFast
 
 
 class Decoder:
@@ -24,11 +26,15 @@ class Decoder:
         return response
 
     def decoder_for_t5(self, input):
-        model_dir = "lcw99/t5-large-korean-text-summary"
-        tokenizer = AutoTokenizer.from_pretrained(model_dir)
-        model = AutoModelForSeq2SeqLM.from_pretrained(model_dir)
+        # model_dir = "lcw99/t5-large-korean-text-summary"
+        # tokenizer = AutoTokenizer.from_pretrained(model_dir)
+        # model = AutoModelForSeq2SeqLM.from_pretrained(model_dir)
 
-        max_input_length = 128
+        model_dir = "./models"
+        tokenizer = T5TokenizerFast.from_pretrained(model_dir)
+        model = T5ForConditionalGeneration.from_pretrained(model_dir)
+
+        max_input_length = 200
         inputs = ["summarize: " + input]
         input_ids = tokenizer(
             inputs, max_length=max_input_length, truncation=True, return_tensors="pt"

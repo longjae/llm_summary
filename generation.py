@@ -2,6 +2,7 @@ import json
 import logging.config
 import os
 
+import chardet
 from dotenv import load_dotenv
 
 from api_request import Decoder
@@ -20,7 +21,10 @@ def get_llm_summary(args, decoder):
     logger.info("LOAD JSON DATA \n")
     # in_file = os.path.join("./data/train.json")
     in_file = os.path.join("./data/valid.json")
-    with open(in_file, "r", encoding="utf-8") as f:
+    with open(in_file, "rb") as f:
+        result = chardet.detect(f.read())
+        file_encoding = result["encoding"]
+    with open(in_file, "r", encoding=file_encoding) as f:
         data = json.load(f)
 
     with open("./msg/sys.txt", "r") as f:
@@ -33,7 +37,10 @@ def get_llm_summary(args, decoder):
                 kw_txt = f.read()
             with open(f"./msg/{args.cot}/cot.txt", "r") as f:
                 cot_txt = f.read()
-        with open("./output/std_output.json", "r") as f:
+        with open("./output/std_output.json", "rb") as f:
+            result = chardet.detect(f.read())
+            file_encoding = result["encoding"]
+        with open("./output/std_output.json", "r", encoding=file_encoding) as f:
             std_output = json.load(f)["output"]
 
     data_output = {"output": []}
@@ -100,7 +107,7 @@ def get_llm_summary(args, decoder):
             )
     if args.cot == None:
         args.cot = "std"
-    with open(f"./output/{args.cot}_output.json", "w") as f:
+    with open(f"./output/{args.cot}_output.json", "w", encoding="utf-8") as f:
         f.write(json.dumps(data_output, indent=4, ensure_ascii=False))
 
 

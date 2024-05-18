@@ -3,6 +3,7 @@ import json
 import logging.config
 import os
 
+import chardet
 from metric import BatchEvaluation
 
 with open("../config/logging.json", "r") as f:
@@ -14,7 +15,10 @@ logger = logging.getLogger()
 
 def batch_evaluation(cot, start_id, end_id):
     file_path = f"../output/{cot}_output.json"
-    with open(file_path, "r", encoding="utf-8") as f:
+    with open(file_path, "rb") as f:
+        result = chardet.detect(f.read())
+        file_encoding = result["encoding"]
+    with open(file_path, "r", encoding=file_encoding) as f:
         data = json.load(f)["output"]
 
     eva_ori_std = BatchEvaluation()
