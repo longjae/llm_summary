@@ -6,6 +6,7 @@ def parse_arguments():
     parser.add_argument("--start_id", type=int, default="0")
     parser.add_argument("--end_id", type=int, default="0")
     parser.add_argument("--cot", default=None, choices=[None, "cot", "casebrief", "t5"])
+    parser.add_argument("--method", default=None, choices=[None, "costar"])
     args = parser.parse_args()
 
     return args
