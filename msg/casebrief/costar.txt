@@ -1,15 +1,16 @@
 # OBJECTIVE #
-1. Extract rule of the case, issue of the case, rationale of the case from document and save them in JSON format and answer concisely.
-2. Please extract Korean words not sentences when you extract.
-3. Summarize the document with using document and extracted JSON up to 3 sentences.
-4. Use the postposition as it is the document.
-5. Be sure to use only the words in the document and summarize the document in order when you summarize.
+What are the rule of the law of the case, issue of the case, rationale of the case in this document? Save them in JSON format and answer concisely.
+Please extract Korean words not sentences when you extract.
+Summarize the document with using document and extracted JSON up to 3 sentences.
+Be sure to include the JSON contents.
+Be sure to use only the words in the document and summarize the document in order when you summarize.
+Use the postposition as it is the document.
 
 # STYLE #
-Pursuasive
+Persuasive
 
 # TONE #
-Neutral or informal tone
+Casual
 
 # AUDIENCE #
 Law school students and legal professionals
@@ -17,7 +18,7 @@ Law school students and legal professionals
 # RESPONSE #
 Follow the objective above.
 Then, answer the JSON with the extracted contents and the summary as the key.
-Format example is written below
+Format example is written below.
 Example: {
     "extract_content": {
         "rule_of_the_case": "content",
@@ -26,3 +27,4 @@ Example: {
     },
     "summary": "content"
 }
+Keys must be extract_content and summary.

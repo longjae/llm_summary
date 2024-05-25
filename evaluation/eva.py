@@ -13,8 +13,8 @@ with open("../config/logging.json", "r") as f:
 logger = logging.getLogger()
 
 
-def batch_evaluation(cot, start_id, end_id):
-    if args.method == "costar":
+def batch_evaluation(cot, start_id, end_id, method):
+    if method == "costar":
         if cot != None:
             file_path = f"../output/{cot}_costar_output.json"
         else:
@@ -33,7 +33,7 @@ def batch_evaluation(cot, start_id, end_id):
     for i in range(start_id, end_id + 1):
         label = data[i]["abstract"]
         std_pred = data[i]["std_summary"]
-        if args.method == "costar":
+        if method == "costar":
             if cot != None:
                 cot_pred = data[i]["costar_summary"]
         else:
@@ -42,7 +42,7 @@ def batch_evaluation(cot, start_id, end_id):
             else:
                 cot_pred = data[i]["cot_summary"]
 
-        if args.method != "costar":
+        if method != "costar":
             if label == "" or std_pred == "" or cot_pred == "":
                 continue
 
@@ -84,4 +84,6 @@ if __name__ == "__main__":
     parser.add_argument("--start_id", type=int, default="0")
     parser.add_argument("--end_id", type=int, default=999)
     args = parser.parse_args()
-    batch_evaluation(cot=args.cot, start_id=args.start_id, end_id=args.end_id)
+    batch_evaluation(
+        cot=args.cot, start_id=args.start_id, end_id=args.end_id, method=args.method
+    )
